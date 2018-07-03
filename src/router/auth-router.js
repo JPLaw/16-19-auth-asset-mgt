@@ -36,6 +36,7 @@ authRouter.get('/api/login', basicAuthMiddleware, (request, response, next) => {
       return response.json({ token });
     })
     .catch(next);
+  return undefined;
 });
 
 export default authRouter;
