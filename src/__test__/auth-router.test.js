@@ -42,23 +42,6 @@ describe('AUTH router', () => {
       });
   });
 
-  test('POST 409 to api/login conflicting user info', () => {
-    let userConflict;
-    return createAccountMockPromise()
-      .then((mockData) => {
-        userConflict = mockData.originalRequest;
-        return superagent.post(`${apiUrl}/signup`)
-          .send(userConflict); 
-      })
-      .then((response) => {
-        expect(response.status).toEqual(409);
-        expect(response.body.token).toBeTruthy();
-      })
-      .catch((err) => {
-        expect(err.status).toEqual(409);
-      });
-  });
-
 
   test('GET 200 to api/login for successful login and receipt of a TOKEN', () => {
     // in order to login, we need to create a mock account first
@@ -73,7 +56,6 @@ describe('AUTH router', () => {
         // When I login, I get a 200 status code and a TOKEN
         expect(response.status).toEqual(200);
         expect(response.body.token).toBeTruthy();
-        // expect(response.body.token).toEqual(token);
       })
       .catch((err) => {
         throw err;
