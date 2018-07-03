@@ -43,16 +43,19 @@ describe('AUTH router', () => {
   });
 
   test('POST 409 to api/login conflicting user info', () => {
+    let userConflict;
     return createAccountMockPromise()
       .then((mockData) => {
-        return superagent.post(`${apiUrl}/signup`);
+        userConflict = mockData.originalRequest;
+        return superagent.post(`${apiUrl}/signup`)
+          .send(userConflict); 
       })
       .then((response) => {
         expect(response.status).toEqual(409);
         expect(response.body.token).toBeTruthy();
       })
-      .catch((error) => {
-        expect(error.status).toEqual(409);
+      .catch((err) => {
+        expect(err.status).toEqual(409);
       });
   });
 
