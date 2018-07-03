@@ -1,3 +1,5 @@
+'use strict';
+
 import mongoose from 'mongoose';
 // this is used to generate a random hash
 import bcrypt from 'bcrypt';

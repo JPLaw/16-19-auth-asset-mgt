@@ -1,3 +1,5 @@
+'use strict';
+
 import superagent from 'superagent';
 import faker from 'faker';
 
@@ -26,6 +28,31 @@ describe('AUTH router', () => {
       })
       .catch((err) => {
         throw err;
+      });
+  });
+
+  test('POST 400 to /api/login for unsuccesful account creation', () => {
+    return superagent.get(`${apiUrl}/login`)
+      .auth('bad username', 'bad password')
+      .then((response) => {
+        throw response;
+      })
+      .catch((err) => {
+        expect(err.status).toEqual(400);
+      });
+  });
+
+  test('POST 409 to api/login conflicting user info', () => {
+    return createAccountMockPromise()
+      .then((mockData) => {
+        return superagent.post(`${apiUrl}/signup`);
+      })
+      .then((response) => {
+        expect(response.status).toEqual(409);
+        expect(response.body.token).toBeTruthy();
+      })
+      .catch((error) => {
+        expect(error.status).toEqual(409);
       });
   });
 

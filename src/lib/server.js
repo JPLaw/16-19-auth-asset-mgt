@@ -27,7 +27,7 @@ app.use(loggerMiddleware);
 app.use(authRouter);
 // catch all
 app.all('*', (request, response) => {
-  console.log('Returning a 404 from the catch/all route');
+  logger.log(logger.INFO, 'Returning a 404 from the catch/all');
   return response.sendStatus(404).send('Route Not Registered');
 });
 
@@ -38,7 +38,7 @@ const startServer = () => {
   return mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
       server = app.listen(PORT, () => {
-        console.log('Server up:', PORT);
+        logger.log(logger.INFO, `Server listening on port ${PORT}`);
       });
     })
     .catch((err) => {
