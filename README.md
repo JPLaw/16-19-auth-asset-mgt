@@ -1,4 +1,4 @@
-![cf](https://i.imgur.com/7v5ASc8.png) Lab 16: Basic Authentication
+[![Build Status](https://travis-ci.org/JPLaw/16-19-auth-asset-mgt.svg?branch=master)](https://travis-ci.org/JPLaw/16-19-auth-asset-mgt) Lab 16: Basic Authentication
 ======
 
 ## Submission Instructions
