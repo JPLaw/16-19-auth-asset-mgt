@@ -2,26 +2,26 @@ import superagent from 'superagent';
 import faker from 'faker';
 import { startServer, stopServer } from '../lib/server';
 import { createAccountMockPromise } from './lib/account-mock';
-import { removeAllResources } from './lib/profile-mock';
+// import { removeAllResources } from './lib/profile-mock';
 
 const apiUrl = `http://localhost:${process.env.PORT}/api`;
 
 describe('TESTING ROUTER PROFILE', () => {
   let mockData;
   let token;
-  // let account;
+  let account; /*eslint-disable-line*/
   beforeAll(async () => {
     startServer();
   });
   afterAll(stopServer);
   beforeEach(async () => {
-    await removeAllResources();
+    // await removeAllResources();
     try {
       mockData = await createAccountMockPromise();
       account = mockData.account; /*eslint-disable-line*/
       token = mockData.token; /*eslint-disable-line*/
     } catch (err) {
-      return console.log(err); /*eslint-disable-line*/
+      return console.log(err); 
     }
     return undefined;
   });
@@ -32,19 +32,18 @@ describe('TESTING ROUTER PROFILE', () => {
         bio: faker.lorem.words(20),
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
-        // accountId: account._id,
       };
       try {
         const response = await superagent.post(`${apiUrl}/profiles`)
           .set('Authorization', `Bearer ${token}`)
           .send(mockProfile);
         expect(response.status).toEqual(200);
-        // expect(response.body.accountId).toEqual(account._id.toString());
-        // expect(response.body.firstName).toEqual(mockProfile.firstName);
-        // expect(response.body.lastName).toEqual(mockProfile.lastName);
-        // expect(response.body.bio).toEqual(mockProfile.bio);
+        expect(response.body.accountId).toEqual(account._id.toString());
+        expect(response.body.firstName).toEqual(mockProfile.firstName);
+        expect(response.body.lastName).toEqual(mockProfile.lastName);
+        expect(response.body.bio).toEqual(mockProfile.bio);
       } catch (error) {
-        expect(error).toEqual('POST 200 unsuccessful profile creation');
+        expect(error).toEqual('OOOOPS');
       }
     });
 
@@ -52,7 +51,7 @@ describe('TESTING ROUTER PROFILE', () => {
       try {
         const response = await superagent.post(`${apiUrl}/profiles`)
           .set('Authorization', 'Bearer THISABADTOKEN');
-        expect(response).toEqual('POST 400- shouldn\'t be here');
+        expect(response).toEqual('OOOOPS');
       } catch (error) {
         expect(error.status).toEqual(400);
       }
@@ -62,7 +61,7 @@ describe('TESTING ROUTER PROFILE', () => {
       try {
         const response = await superagent.post(`${apiUrl}/BADPATH`)
           .set('Authorization', `Bearer ${token}`);
-        expect(response).toEqual('potato');
+        expect(response).toEqual('OOOOPS');
       } catch (error) {
         expect(error.status).toEqual(404);
       }
@@ -70,7 +69,7 @@ describe('TESTING ROUTER PROFILE', () => {
   });
 
   describe('GET PROFILE ROUTES TESTING', () => {
-    test('200 GET for successful ___________', async () => {
+    test('200 GET for successful get', async () => {
       try {
         const response = await superagent.get(`${apiUrl}/profiles/`)
           .set('Authorization', `Bearer ${token}`);
@@ -82,8 +81,8 @@ describe('TESTING ROUTER PROFILE', () => {
 
     test('GET 404 to /api/profiles/?id= for a BAD profile PATH', async () => {
       try {
-        const response = await superagent.get(`${apiUrl}/potato`);
-        expect(response).toEqual('???????????');
+        const response = await superagent.get(`${apiUrl}/willnotwork`);
+        expect(response).toEqual('OOOOPS');
       } catch (error) {
         expect(error.status).toEqual(404);
       }

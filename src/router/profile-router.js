@@ -37,6 +37,15 @@ profileRouter.get('/api/profiles/:id?', bearerAuthMiddleware, (request, response
       .catch(next);
   }
 
+  Profile.init()
+    .then(() => {
+      return Profile.findOne({ _id: request.params.id });
+    })
+    .then((profile) => {
+      logger.log(logger.INFO, `AFTER getting model: ${JSON.stringify(profile)}`);
+      // if (!profile) return next(new HttpErrors(400, 'PROFILE ROUTER GET: profile not found'));
+      return response.json(profile);
+    });
   Profile.findOne({ _id: request.params.id })
     .then((profile) => {
       if (!profile) return next(new HttpErrors(400, 'PROFILE ROUTER GET: profile not found'));
