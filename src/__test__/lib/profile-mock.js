@@ -14,7 +14,6 @@ const createProfileMockPromise = () => {
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
         profileImageUrl: faker.random.image(),
-        email: faker.internet.email(),
         accountId: mockAccountData.account._id,
       };
       return new Profile(mockProfile).save();
