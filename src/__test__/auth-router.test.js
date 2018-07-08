@@ -12,13 +12,42 @@ const apiUrl = `http://localhost:${process.env.PORT}/api`;
 describe('AUTH router', () => {
   beforeAll(startServer);
   afterAll(stopServer);
-  afterEach(removeAccountMockPromise);
+  beforeEach((done) => {
+    removeAccountMockPromise();
+    done();
+  });
 
+  test('GET 200 to api/login for successful login and receipt of a TOKEN', () => {
+    return createAccountMockPromise()
+      .then((mockData) => {
+        return superagent.get(`${apiUrl}/login`)
+          .auth(mockData.account.username, mockData.originalRequest.password);
+      })
+      .then((response) => {
+        expect(response.status).toEqual(200);
+        expect(response.body.token).toBeTruthy();
+      })
+      .catch((err) => {
+        throw err;
+      });
+  });
+
+  test('GET 400 to /api/login for unsuccesful login with bad username and password', () => {
+    return superagent.get(`${apiUrl}/login`)
+      .auth('bad username', 'bad password')
+      .then((response) => {
+        throw response;
+      })
+      .catch((err) => {
+        expect(err.status).toEqual(400);
+      });
+  });  
+  
   test('POST 200 to /api/signup for successful account creation and receipt of a TOKEN', () => {
     const mockAccount = {
       username: faker.internet.userName(),
       email: faker.internet.email(),
-      password: 'yourpasswordisincorrect',
+      password: 'password1234',
     };
     return superagent.post(`${apiUrl}/api/signup`)
       .send(mockAccount)
@@ -32,34 +61,6 @@ describe('AUTH router', () => {
   });
 
   test('POST 400 to /api/login for unsuccesful account creation', () => {
-    return superagent.get(`${apiUrl}/login`)
-      .auth('bad username', 'bad password')
-      .then((response) => {
-        throw response;
-      })
-      .catch((err) => {
-        expect(err.status).toEqual(400);
-      });
-  });
-
-
-  test('GET 200 to api/login for successful login and receipt of a TOKEN', () => {
-    return createAccountMockPromise()
-      .then((mockData) => {
-        // token = mockData.token; 
-        return superagent.get(`${apiUrl}/api/login`)
-          .auth(mockData.account.username, mockData.originalRequest.password); // this is how we send authorization headers via REST/HTTP
-      })
-      .then((response) => {
-        expect(response.status).toEqual(200);
-        expect(response.body.token).toBeTruthy();
-      })
-      .catch((error) => {
-        throw error;
-      });
-  });
-
-  test('GET 400 to /api/login for unsuccesful login with bad username and password', () => {
     return superagent.get(`${apiUrl}/login`)
       .auth('bad username', 'bad password')
       .then((response) => {

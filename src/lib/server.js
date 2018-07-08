@@ -5,12 +5,13 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import logger from './logger';
 
-// middleware
 import errorMiddleWare from '../lib/middleware/error-middleware';
 import loggerMiddleware from '../lib/middleware/logger-middleware';
 
-// our routes
+
 import authRouter from '../router/auth-router';
+import profileRouter from '../router/profile-router';
+import bookRouter from '../router/book-router';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,7 +26,9 @@ app.use(express.json());
 // our own api routers or middleware
 app.use(loggerMiddleware);
 app.use(authRouter);
-// catch all
+app.use(bookRouter);
+app.use(profileRouter);
+
 app.all('*', (request, response) => {
   logger.log(logger.INFO, 'Returning a 404 from the catch/all');
   return response.sendStatus(404).send('Route Not Registered');

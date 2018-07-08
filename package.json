@@ -43,6 +43,7 @@
     "winston": "^3.0.0"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "bcrypt": "^2.0.1",
     "cors": "^2.8.4",
     "express": "^4.16.3",
