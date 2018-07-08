@@ -49,7 +49,7 @@ describe('AUTH router', () => {
       email: faker.internet.email(),
       password: 'password1234',
     };
-    return superagent.post(`${apiUrl}/api/signup`)
+    return superagent.post(`${apiUrl}/signup`)
       .send(mockAccount)
       .then((response) => {
         expect(response.status).toEqual(200);
